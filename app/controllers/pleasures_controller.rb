@@ -7,6 +7,11 @@ class PleasuresController < ApplicationController
     render json: @pleasures
   end
 
+  def users
+    @subcategories = Pleasure.by_user(params.require(:user_id)).select(:subcategory_id)
+    @pleasures = Pleasure.by_subcategory(@subcategories).where.not(user_id: params.require(:user_id))
+    render json: @pleasures
+  end
   # GET /pleasures/1
   def show
     render json: @pleasure
@@ -38,13 +43,13 @@ class PleasuresController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_pleasure
-      @pleasure = Pleasure.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_pleasure
+    @pleasure = Pleasure.find(params[:id])
+  end
 
-    # Only allow a trusted parameter "white list" through.
-    def pleasure_params
-      params.require(:pleasure).permit(:name, :subcategory_id, :user_id, :description)
-    end
+  # Only allow a trusted parameter "white list" through.
+  def pleasure_params
+    params.require(:pleasure).permit(:name, :subcategory_id, :user_id, :description)
+  end
 end

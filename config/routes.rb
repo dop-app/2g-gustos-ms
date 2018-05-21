@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get '/users', to: 'pleasures#users'
   resources :pleasures
   resources :subcategories
   resources :categories
